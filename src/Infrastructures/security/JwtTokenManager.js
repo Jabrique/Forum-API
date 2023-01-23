@@ -1,4 +1,5 @@
 const AuthenticationTokenManager = require('../../Applications/security/AuthenticationTokenManager');
+const AuthenticationError = require('../../Commons/exceptions/AuthenticationError');
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 
 class JwtTokenManager extends AuthenticationTokenManager {
@@ -22,6 +23,24 @@ class JwtTokenManager extends AuthenticationTokenManager {
     } catch (error) {
       throw new InvariantError('refresh token tidak valid');
     }
+  }
+
+  async verifyAccessToken(token) {
+    try {
+      const artifacts = this._jwt.decode(token);
+      await this._jwt.verify(artifacts, process.env.ACCESS_TOKEN_KEY);
+    } catch (error) {
+      throw new InvariantError('access token tidak valid');
+    }
+  }
+
+  async getTokenFromHeader(headerAuthorization) {
+    if (!headerAuthorization) {
+      throw new AuthenticationError('tidak ada authentifikasi');
+    }
+
+    const token = headerAuthorization.replace(/^Bearer\s+/, '');
+    return token;
   }
 
   async decodePayload(token) {

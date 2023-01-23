@@ -1,4 +1,5 @@
 const Jwt = require('@hapi/jwt');
+const AuthenticationError = require('../../../Commons/exceptions/AuthenticationError');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const JwtTokenManager = require('../JwtTokenManager');
 
@@ -64,6 +65,39 @@ describe('JwtTokenManager', () => {
       await expect(jwtTokenManager.verifyRefreshToken(refreshToken))
         .resolves
         .not.toThrow(InvariantError);
+    });
+  });
+
+  describe('verifyAccessToken function', () => {
+    it('should throw error when verification token not match', async () => {
+      // Arrange
+      const jwtTokenManager = new JwtTokenManager(Jwt.token);
+      const refreshToken = await jwtTokenManager.createRefreshToken({ username: 'dicoding' });
+
+      // Action and Assert
+      await expect(jwtTokenManager.verifyAccessToken(refreshToken))
+        .rejects.toThrow(InvariantError);
+    });
+
+    it('should not throw error when verification token success', async () => {
+      // Arrange
+      const jwtTokenManager = new JwtTokenManager(Jwt.token);
+      const accessToken = await jwtTokenManager.createAccessToken({ username: 'dicoding' });
+
+      // Action and Assert
+      await expect(jwtTokenManager.verifyAccessToken(accessToken))
+        .resolves.not.toThrow(InvariantError);
+    });
+  });
+
+  describe('getTokenFromHeader function', () => {
+    it('should throw error when not contain header', async () => {
+      // Arrange
+      const jwtTokenManager = new JwtTokenManager(Jwt.token);
+      const header = '';
+
+      // Action and Assert
+      await expect(jwtTokenManager.getTokenFromHeader(header)).rejects.toThrow(AuthenticationError);
     });
   });
 

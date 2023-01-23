@@ -10,10 +10,19 @@ class AuthenticationTokenManager {
   async verifyRefreshToken(token) {
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
   }
-
-  async decodePayload() {
+  
+  async verifyAccessToken(token){
     throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
   }
+
+  async getTokenFromHeader(token){
+    throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
+  }
+
+  async decodePayload(token) {
+    throw new Error('AUTHENTICATION_TOKEN_MANAGER.METHOD_NOT_IMPLEMENTED');
+  }
+
 }
 
 module.exports = AuthenticationTokenManager;
