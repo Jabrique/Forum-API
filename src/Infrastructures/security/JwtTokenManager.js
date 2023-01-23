@@ -38,7 +38,6 @@ class JwtTokenManager extends AuthenticationTokenManager {
     if (!headerAuthorization) {
       throw new AuthenticationError('tidak ada authentifikasi');
     }
-
     const token = headerAuthorization.replace(/^Bearer\s+/, '');
     return token;
   }

@@ -99,6 +99,18 @@ describe('JwtTokenManager', () => {
       // Action and Assert
       await expect(jwtTokenManager.getTokenFromHeader(header)).rejects.toThrow(AuthenticationError);
     });
+
+    it('should return token correctly from a header', async () => {
+      // Arrange
+      const header = 'Bearer token';
+      const jwtTokenManager = new JwtTokenManager(Jwt.token);
+
+      // Action
+      const token = await jwtTokenManager.getTokenFromHeader(header);
+
+      // Assert
+      expect(token).toEqual('token');
+    });
   });
 
   describe('decodePayload function', () => {
