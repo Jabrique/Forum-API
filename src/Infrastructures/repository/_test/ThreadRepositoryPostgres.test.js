@@ -66,7 +66,7 @@ describe('ThreadRepositoryPostgres', () => {
       // action & assert
       await expect(threadRepositoryPostgres.getThreadById('thread-x'))
         .rejects
-        .toThrowError(NotFoundError);
+        .toThrowError('thread tidak dapat ditemukan');
     });
 
     it('should return thread by id correctly', async () => {
@@ -81,7 +81,6 @@ describe('ThreadRepositoryPostgres', () => {
         body: 'mantap',
         date: '2023',
         username: 'dicoding',
-        comments: [],
       };
 
       // Action

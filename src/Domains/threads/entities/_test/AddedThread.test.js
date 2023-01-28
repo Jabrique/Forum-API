@@ -36,7 +36,7 @@ describe('addedThread', () => {
     const addedThread = new AddedThread(payload);
 
     // Assert
-    expect(addedThread).toBeInstanceOf(AddedThread)
+    expect(addedThread).toBeInstanceOf(AddedThread);
     expect(addedThread.id).toEqual(payload.id);
     expect(addedThread.title).toEqual(payload.title);
     expect(addedThread.owner).toEqual(payload.owner);
