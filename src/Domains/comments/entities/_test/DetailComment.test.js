@@ -7,6 +7,7 @@ describe('DetailComment', () => {
       username: 'dicoding',
       date: '2023',
       replies: [],
+      content: 'bakso',
     };
 
     // Action and Assert
@@ -20,6 +21,7 @@ describe('DetailComment', () => {
       date: '2023',
       replies: true,
       content: 'test',
+      isDeleted: {},
     };
 
     // Action and Assert
@@ -33,6 +35,7 @@ describe('DetailComment', () => {
       date: '2023',
       replies: [],
       content: 'test',
+      isDeleted: false,
     };
 
     // Action
@@ -45,5 +48,6 @@ describe('DetailComment', () => {
     expect(detailComment.date).toEqual(payload.date);
     expect(detailComment.replies).toEqual(payload.replies);
     expect(detailComment.content).toEqual(payload.content);
+    expect(detailComment.isDeleted).toEqual(payload.isDeleted);
   });
 });

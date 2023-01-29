@@ -4,8 +4,10 @@ describe('DetailReply', () => {
   it('should throw error when not contain needed property', () => {
     const payload = {
       id: 'Replies-123',
+      comment_Id: 'comment-123',
       content: 'mantap',
       date: '2023',
+      username: 'dicoding',
     };
 
     // Action and Assert
@@ -15,9 +17,11 @@ describe('DetailReply', () => {
   it('should throw error when not meet data type specification', () => {
     const payload = {
       id: 'Replies-123',
+      comment_Id: 'comment-123',
       content: 'mantap',
       date: '2023',
-      username: true,
+      username: 'test',
+      isDeleted: {},
     };
 
     // Action and Assert
@@ -27,9 +31,11 @@ describe('DetailReply', () => {
   it('should create detailReplies object correctly', () => {
     const payload = {
       id: 'Replies-123',
+      comment_Id: 'comment-123',
       content: 'mantap',
       date: '2023',
       username: 'dicoding',
+      isDeleted: false,
     };
 
     // Action
@@ -41,5 +47,6 @@ describe('DetailReply', () => {
     expect(detailReplies.content).toEqual(payload.content);
     expect(detailReplies.date).toEqual(payload.date);
     expect(detailReplies.username).toEqual(payload.username);
+    expect(detailReplies.isDeleted).toEqual(payload.isDeleted);
   });
 });
