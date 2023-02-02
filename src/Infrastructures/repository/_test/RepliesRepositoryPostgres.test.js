@@ -15,7 +15,8 @@ describe('ReplyRepositoryPostgres', () => {
       fullname: 'anos voldigoad',
     });
     await ThreadsTableTestHelper.addThread({ id: 'thread-123' });
-    await CommentsTableTestHelper.addComment({ commentId: 'comment-123' });
+    await CommentsTableTestHelper.addComment({ id: 'comment-123' });
+    await CommentsTableTestHelper.addComment({ id: 'comment-1234' });
   });
   afterEach(async () => {
     await RepliesTableTestHelper.cleanTable();
@@ -82,13 +83,30 @@ describe('ReplyRepositoryPostgres', () => {
       await expect(repliesRepositoryPostgres.verifyReplyAccess({
         owner: 'user-123',
         replyId: 'reply-123',
-      })).resolves.toBeUndefined()
+      })).resolves.toBeUndefined();
     });
   });
 
-  describe('getRepliesByThreadId', ()=>{
-    it('should return all replies on thread', async()=>{
-      
-    })
-  })
+  describe('getRepliesByThreadId', () => {
+    it('should return all replies on thread', async () => {
+      // Arrange
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {}, {});
+
+      await RepliesTableTestHelper.addReply({ id: 'reply-123', date: '2022' });
+      await RepliesTableTestHelper.addReply({ id: 'reply-1234', date: '2023' });
+
+      // removing owner for expectedReplies
+      const { owner: ownerA, ...replyA } = await RepliesTableTestHelper.findReplyById('reply-123');
+      const { owner: ownerB, ...replyB } = await RepliesTableTestHelper.findReplyById('reply-1234');
+
+      const expectedReplies = [{ ...replyA, username: 'anos' }, { ...replyB, username: 'anos' }];
+
+      // Action
+      const replies = await repliesRepositoryPostgres.getRepliesByThreadId('thread-123');
+
+      // Assert
+      expect(replies).toHaveLength(2);
+      expect(replies).toStrictEqual(expectedReplies);
+    });
+  });
 });

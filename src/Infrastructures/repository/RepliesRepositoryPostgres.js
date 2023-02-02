@@ -31,6 +31,19 @@ class RepliesRepositoryPostgres extends ReplyRepository {
       throw new AuthorizationError('anda tidak berhak mengakses reply ini');
     }
   }
+
+  async getRepliesByThreadId(threadId) {
+    const result = await this._pool.query({
+      text: `SELECT replies.id, replies.content, replies.date, replies.is_Deleted, comments.id as comment_Id, users.username
+      FROM replies
+      INNER JOIN comments ON replies.comment_id=comments.id
+      INNER JOIN users ON replies.owner=users.id
+      WHERE comments.thread_id=$1
+      ORDER BY date ASC`,
+      values: [threadId],
+    });
+    return result.rows;
+  }
 }
 
 module.exports = RepliesRepositoryPostgres;
