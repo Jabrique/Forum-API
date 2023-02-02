@@ -1,6 +1,6 @@
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 
-class NewReplies {
+class NewReply {
   constructor(payload) {
     this._validatePayload(payload);
 
@@ -22,4 +22,4 @@ class NewReplies {
   }
 }
 
-module.exports = NewReplies;
+module.exports = NewReply;
