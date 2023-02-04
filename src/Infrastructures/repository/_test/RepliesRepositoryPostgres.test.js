@@ -109,4 +109,47 @@ describe('ReplyRepositoryPostgres', () => {
       expect(replies).toStrictEqual(expectedReplies);
     });
   });
+
+  describe('checkReplyIsExist', () => {
+    it('should throw error when reply does not exist', async () => {
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {}, {});
+
+      await expect(repliesRepositoryPostgres.checkReplyIsExist({ threadId: 'thread-123', commentId: 'comment-123', replyId: 'reply-123' })).rejects.toThrowError('reply tidak ada');
+    });
+
+    it('should not throw error when reply exist', async () => {
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {}, {});
+
+      // Adding reply
+      await RepliesTableTestHelper.addReply({ id: 'reply-123' });
+
+      await expect(repliesRepositoryPostgres.checkReplyIsExist({ threadId: 'thread-123', commentId: 'comment-123', replyId: 'reply-123' })).resolves.not.toThrowError();
+    });
+  });
+
+  describe('deleteReplyById function', () => {
+    it('should not throw error when reply deleted successfully', async () => {
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {}, {});
+
+      await RepliesTableTestHelper.addReply({});
+
+      await expect(repliesRepositoryPostgres.deleteReplyById('reply-123')).resolves.toBeUndefined();
+    });
+
+    it('is_deleted column should be true in database', async () => {
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {}, {});
+
+      await RepliesTableTestHelper.addReply({});
+      await repliesRepositoryPostgres.deleteReplyById('reply-123');
+
+      const reply = await RepliesTableTestHelper.findReplyById('reply-123');
+      expect(reply.is_deleted).toEqual(true);
+    });
+
+    it('should throw error when reply does nto exist', async () => {
+      const repliesRepositoryPostgres = new RepliesRepositoryPostgres(pool, {}, {});
+
+      await expect(repliesRepositoryPostgres.deleteReplyById('reply-123')).rejects.toThrowError('reply tidak ada');
+    });
+  });
 });

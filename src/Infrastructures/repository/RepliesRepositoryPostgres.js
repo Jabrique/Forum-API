@@ -1,6 +1,7 @@
 const AddedReplies = require('../../Domains/replies/entities/AddedReply');
 const ReplyRepository = require('../../Domains/replies/RepliesRepository');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 
 class RepliesRepositoryPostgres extends ReplyRepository {
   constructor(pool, idGenerator, dateGenerator) {
@@ -43,6 +44,32 @@ class RepliesRepositoryPostgres extends ReplyRepository {
       values: [threadId],
     });
     return result.rows;
+  }
+
+  async checkReplyIsExist({ threadId, commentId, replyId }) {
+    const result = await this._pool.query({
+      text: `SELECT 1 FROM replies
+      INNER JOIN comments ON replies.comment_id=comments.id
+      WHERE replies.id=$1
+      AND replies.comment_id=$2
+      AND comments.thread_id=$3
+      AND replies.is_deleted=false`,
+      values: [replyId, commentId, threadId],
+    });
+    if (!result.rowCount) {
+      throw new NotFoundError('reply tidak ada');
+    }
+  }
+
+  async deleteReplyById(replyId) {
+    const result = await this._pool.query({
+      text: 'UPDATE replies SET is_deleted=true WHERE id=$1 returning id',
+      values: [replyId],
+    });
+
+    if (!result.rowCount) {
+      throw new NotFoundError('reply tidak ada');
+    }
   }
 }
 
