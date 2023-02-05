@@ -1,6 +1,6 @@
 const AuthenticationTokenManager = require('../../security/AuthenticationTokenManager');
 const ReplyRepository = require('../../../Domains/replies/RepliesRepository');
-const DeleteReplyUseCase = require('../DeleteReply');
+const DeleteReplyUseCase = require('../DeleteReplyUseCase');
 
 describe('DeleteReply', () => {
   it('should orchestrating delete reply action correctly', async () => {

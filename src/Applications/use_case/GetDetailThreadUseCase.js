@@ -18,15 +18,15 @@ class GetDetailThread {
 
   _filterDeletedComment(comments) {
     comments.forEach((comment) => {
-      comment.content = comment.isDeleted ? '**komentar telah dihapus**' : comment.content;
-      delete comment.isDeleted;
+      comment.content = comment.is_deleted ? '**komentar telah dihapus**' : comment.content;
+      delete comment.is_deleted;
     });
   }
 
   _filterDeletedReplies(replies) {
     replies.forEach((reply) => {
-      reply.content = reply.isDeleted ? '**komentar telah dihapus**' : reply.content;
-      delete reply.isDeleted;
+      reply.content = reply.is_deleted ? '**balasan telah dihapus**' : reply.content;
+      delete reply.is_deleted;
     });
   }
 
@@ -34,10 +34,10 @@ class GetDetailThread {
     threadComments.forEach((comment) => {
       comment.replies = [];
       threadReplies.forEach((reply) => {
-        if (reply.commentId === comment.id) {
+        if (reply.comment_id === comment.id) {
           comment.replies.push(reply);
         }
-        delete reply.commentId;
+        delete reply.comment_id;
       });
     });
   }

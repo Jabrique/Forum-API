@@ -1,7 +1,7 @@
 const ThreadRepository = require('../../../Domains/threads/ThreadRepository');
 const CommentRepository = require('../../../Domains/comments/CommentRepository');
 const RepliesRepository = require('../../../Domains/replies/RepliesRepository');
-const GetDetailThread = require('../GetDetailThread');
+const GetDetailThread = require('../GetDetailThreadUseCase');
 
 describe('GetDetailThread', () => {
   it('should orchestrating GetDetailThread action correctly', async () => {
@@ -53,16 +53,16 @@ describe('GetDetailThread', () => {
         date: '2023',
         replies: [],
         content: 'venudznor',
-        isDeleted: false,
+        is_deleted: false,
       }]));
     mockRepliesRepository.getRepliesByThreadId = jest.fn()
       .mockImplementation(() => Promise.resolve([{
         id: 'reply-123',
-        commentId: 'comment-123',
+        comment_id: 'comment-123',
         content: 'bakso',
         date: '2023',
         username: 'test123',
-        isDeleted: false,
+        is_deleted: false,
       }]));
 
     // creating use case
@@ -82,7 +82,7 @@ describe('GetDetailThread', () => {
     expect(mockRepliesRepository.getRepliesByThreadId).toBeCalledWith(useCaseParam);
   });
 
-  it('should change the content comment and reply when isDeleted true', async () => {
+  it('should change the content comment and reply when is_deleted true', async () => {
     const useCaseParam = {
       threadId: 'thread-123',
     };
@@ -104,7 +104,7 @@ describe('GetDetailThread', () => {
           replies: [
             {
               id: 'reply-123',
-              content: '**komentar telah dihapus**',
+              content: '**balasan telah dihapus**',
               date: '2023',
               username: 'test123',
             },
@@ -131,16 +131,16 @@ describe('GetDetailThread', () => {
         date: '2023',
         replies: [],
         content: 'venudznor',
-        isDeleted: true,
+        is_deleted: true,
       }]));
     mockRepliesRepository.getRepliesByThreadId = jest.fn()
       .mockImplementation(() => Promise.resolve([{
         id: 'reply-123',
-        commentId: 'comment-123',
+        comment_id: 'comment-123',
         content: 'bakso',
         date: '2023',
         username: 'test123',
-        isDeleted: true,
+        is_deleted: true,
       }]));
 
     const getDetailThread = new GetDetailThread({
@@ -159,7 +159,7 @@ describe('GetDetailThread', () => {
     expect(mockRepliesRepository.getRepliesByThreadId).toBeCalledWith(useCaseParam);
   });
 
-  it('should push only matched reply commentId', async () => {
+  it('should push only matched reply comment_id', async () => {
     const useCaseParam = {
       threadId: 'thread-123',
     };
@@ -181,7 +181,7 @@ describe('GetDetailThread', () => {
           replies: [
             {
               id: 'reply-777',
-              content: '**komentar telah dihapus**',
+              content: '**balasan telah dihapus**',
               date: '2023',
               username: 'enak',
             },
@@ -208,24 +208,24 @@ describe('GetDetailThread', () => {
         date: '2023',
         replies: [],
         content: 'venudznor',
-        isDeleted: true,
+        is_deleted: true,
       }]));
     mockRepliesRepository.getRepliesByThreadId = jest.fn()
       .mockImplementation(() => Promise.resolve([{
         id: 'reply-123',
-        commentId: 'comment-x',
+        comment_id: 'comment-x',
         content: 'bakso',
         date: '2023',
         username: 'test123',
-        isDeleted: true,
+        is_deleted: true,
       },
       {
         id: 'reply-777',
-        commentId: 'comment-123',
+        comment_id: 'comment-123',
         content: 'soto',
         date: '2023',
         username: 'enak',
-        isDeleted: true,
+        is_deleted: true,
       },
       ]));
 
